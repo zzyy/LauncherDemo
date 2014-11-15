@@ -210,7 +210,7 @@ public class LauncherProvider extends ContentProvider {
         }
 
         // always notify the backup agent
-        LauncherBackupAgentHelper.dataChanged(getContext());
+//        LauncherBackupAgentHelper.dataChanged(getContext());
     }
 
     private void addModifiedTime(ContentValues values) {
