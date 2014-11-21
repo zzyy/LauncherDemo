@@ -117,6 +117,7 @@ class ShortcutInfo extends ItemInfo {
         mIcon = b;
     }
 
+    //zy 获取图标bitmap, 如果为null, 通过intent用packageManager找到图标,并更新iconCache
     public Bitmap getIcon(IconCache iconCache) {
         if (mIcon == null) {
             updateIcon(iconCache);

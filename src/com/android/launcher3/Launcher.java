@@ -400,6 +400,7 @@ public class Launcher extends Activity
         // the LauncherApplication should call this, but in case of Instrumentation it might not be present yet
         mSharedPrefs = getSharedPreferences(LauncherAppState.getSharedPreferencesKey(),
                 Context.MODE_PRIVATE);
+        //zy  设置callBacks
         mModel = app.setLauncher(this);
         mIconCache = app.getIconCache();
         mIconCache.flushInvalidIcons(grid);
@@ -447,6 +448,7 @@ public class Launcher extends Activity
             android.os.Debug.stopMethodTracing();
         }
 
+        //zy 加载数据
         if (!mRestoring) {
             if (sPausedFromUserAction) {
                 // If the user leaves launcher, then we should just load items asynchronously when
@@ -1229,6 +1231,7 @@ public class Launcher extends Activity
      *
      * @return A View inflated from R.layout.application.
      */
+    //zy 创建图标
     View createShortcut(ShortcutInfo info) {
         return createShortcut(R.layout.application,
                 (ViewGroup) mWorkspace.getChildAt(mWorkspace.getCurrentPage()), info);
@@ -1244,6 +1247,7 @@ public class Launcher extends Activity
      * @return A View inflated from layoutResId.
      */
     View createShortcut(int layoutResId, ViewGroup parent, ShortcutInfo info) {
+    	//zy 创建并初始化图标
         BubbleTextView favorite = (BubbleTextView) mInflater.inflate(layoutResId, parent, false);
         favorite.applyFromShortcutInfo(info, mIconCache);
         favorite.setOnClickListener(this);
@@ -3682,6 +3686,7 @@ public class Launcher extends Activity
                 bindItems(shortcuts, start, end, forceAnimateIcons);
             }
         };
+        //zy 检验状态  如果是pasused 暂时不执行
         if (waitUntilResume(r)) {
             return;
         }
@@ -3705,11 +3710,13 @@ public class Launcher extends Activity
                 case LauncherSettings.Favorites.ITEM_TYPE_APPLICATION:
                 case LauncherSettings.Favorites.ITEM_TYPE_SHORTCUT:
                     ShortcutInfo info = (ShortcutInfo) item;
+                    //zy 创建view
                     View shortcut = createShortcut(info);
 
                     /*
                      * TODO: FIX collision case
                      */
+                    //zy 确认对应的cellLayout是否存在
                     if (item.container == LauncherSettings.Favorites.CONTAINER_DESKTOP) {
                         CellLayout cl = mWorkspace.getScreenWithId(item.screenId);
                         if (cl != null && cl.isOccupied(item.cellX, item.cellY)) {
@@ -3717,6 +3724,7 @@ public class Launcher extends Activity
                         }
                     }
 
+                    //zy 加入
                     workspace.addInScreenFromBind(shortcut, item.container, item.screenId, item.cellX,
                             item.cellY, 1, 1);
                     if (animateIcons) {
@@ -3930,6 +3938,7 @@ public class Launcher extends Activity
                 mIntentsOnWorkspaceFromUpgradePath = null;
             }
         } else {
+        	//zy 加载all apps
             if (mAppsCustomizeContent != null) {
                 mAppsCustomizeContent.setApps(apps);
             }

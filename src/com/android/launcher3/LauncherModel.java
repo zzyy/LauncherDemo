@@ -1184,8 +1184,10 @@ public class LauncherModel extends BroadcastReceiver {
                 isLaunching = isLaunching || stopLoaderLocked();
                 mLoaderTask = new LoaderTask(mApp.getContext(), isLaunching);
                 if (synchronousBindPage > -1 && mAllAppsLoaded && mWorkspaceLoaded) {
+                	//zy bind
                     mLoaderTask.runBindSynchronousPage(synchronousBindPage);
                 } else {
+                	//zy 首次加载  从数据库中加载数据并绑定到界面
                     sWorkerThread.setPriority(Thread.NORM_PRIORITY);
                     sWorker.post(mLoaderTask);
                 }
@@ -1291,6 +1293,7 @@ public class LauncherModel extends BroadcastReceiver {
 
             boolean isUpgradePath = false;
             if (!mWorkspaceLoaded) {
+            	//zy 从数据库加载数据
                 isUpgradePath = loadWorkspace();
                 synchronized (LoaderTask.this) {
                     if (mStopped) {
@@ -1377,6 +1380,7 @@ public class LauncherModel extends BroadcastReceiver {
             onlyBindAllApps();
         }
 
+        //zy loader task thread;
         public void run() {
             boolean isUpgrade = false;
 
@@ -1396,6 +1400,7 @@ public class LauncherModel extends BroadcastReceiver {
                             ? Process.THREAD_PRIORITY_DEFAULT : Process.THREAD_PRIORITY_BACKGROUND);
                 }
                 if (DEBUG_LOADERS) Log.d(TAG, "step 1: loading workspace");
+                //zy 加载数据并绑定workspace图标
                 isUpgrade = loadAndBindWorkspace();
 
                 if (mStopped) {
@@ -1414,6 +1419,7 @@ public class LauncherModel extends BroadcastReceiver {
 
                 // second step
                 if (DEBUG_LOADERS) Log.d(TAG, "step 2: loading all apps");
+                //zy 先加载,加载完成后将mAllAppsLoaded设为true;  绑定AllApps界面图标
                 loadAndBindAllApps();
 
                 // Restore the default thread priority after we are done loading items
@@ -1608,11 +1614,13 @@ public class LauncherModel extends BroadcastReceiver {
             final boolean isSafeMode = manager.isSafeMode();
 
             LauncherAppState app = LauncherAppState.getInstance();
+            //zy 获取屏幕X Y容量的大小, 用于验证
             DeviceProfile grid = app.getDynamicGrid().getDeviceProfile();
             int countX = (int) grid.numColumns;
             int countY = (int) grid.numRows;
 
             // Make sure the default workspace is loaded, if needed
+            //zy 从xml加载数据到数据库
             LauncherAppState.getLauncherProvider().loadDefaultFavoritesIfNecessary(0);
 
             // Check if we need to do any upgrade-path logic
@@ -1624,6 +1632,7 @@ public class LauncherModel extends BroadcastReceiver {
                 final ArrayList<Long> itemsToRemove = new ArrayList<Long>();
                 final Uri contentUri = LauncherSettings.Favorites.CONTENT_URI;
                 if (DEBUG_LOADERS) Log.d(TAG, "loading model from " + contentUri);
+                //zy 1.通过contentProvider从数据库检索数据
                 final Cursor c = contentResolver.query(contentUri, null, null, null, null);
 
                 // +1 for the hotseat (it can be larger than the workspace)
@@ -1725,6 +1734,7 @@ public class LauncherModel extends BroadcastReceiver {
                                     }
                                 }
 
+                                //zy 2.根据获得的数据 初始化相应的属性
                                 if (info != null) {
                                     info.id = id;
                                     info.intent = intent;
@@ -1752,6 +1762,8 @@ public class LauncherModel extends BroadcastReceiver {
                                         break;
                                     }
 
+                                    //zy 如果类型是CONTAINER_DESKTOP CONTAINER_HOTSEAT 放入sBgWorkspaceItems
+                                    //		如果是在folder中,找到对应的FolderInfo并放入
                                     switch (container) {
                                     case LauncherSettings.Favorites.CONTAINER_DESKTOP:
                                     case LauncherSettings.Favorites.CONTAINER_HOTSEAT:
@@ -1774,6 +1786,7 @@ public class LauncherModel extends BroadcastReceiver {
                                 }
                                 break;
 
+                            //zy folder的处理
                             case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
                                 id = c.getLong(idIndex);
                                 FolderInfo folderInfo = findOrMakeFolder(sBgFolders, id);
@@ -1805,6 +1818,7 @@ public class LauncherModel extends BroadcastReceiver {
                                     break;
                                 }
 
+                                //zy 在桌面,加入sBgWorkspaceItems
                                 switch (container) {
                                     case LauncherSettings.Favorites.CONTAINER_DESKTOP:
                                     case LauncherSettings.Favorites.CONTAINER_HOTSEAT:
@@ -1812,10 +1826,12 @@ public class LauncherModel extends BroadcastReceiver {
                                         break;
                                 }
 
+                                //zy sBgFolders加入相应的键值对
                                 sBgItemsIdMap.put(folderInfo.id, folderInfo);
                                 sBgFolders.put(folderInfo.id, folderInfo);
                                 break;
 
+                            //zy appwidget的处理
                             case LauncherSettings.Favorites.ITEM_TYPE_APPWIDGET:
                                 // Read all Launcher-specific widget details
                                 int appWidgetId = c.getInt(appWidgetIdIndex);
@@ -1880,6 +1896,7 @@ public class LauncherModel extends BroadcastReceiver {
                                         String[] args = {Integer.toString(c.getInt(idIndex))};
                                         contentResolver.update(contentUri, values, where, args);
                                     }
+                                    //zy 存入数据
                                     sBgItemsIdMap.put(appWidgetInfo.id, appWidgetInfo);
                                     sBgAppWidgets.add(appWidgetInfo);
                                 }
@@ -1897,6 +1914,7 @@ public class LauncherModel extends BroadcastReceiver {
 
                 // Break early if we've stopped loading
                 if (mStopped) {
+                	//zy 清楚所有sBg的数据
                     clearSBgDataStructures();
                     return false;
                 }
@@ -1945,6 +1963,7 @@ public class LauncherModel extends BroadcastReceiver {
                     }
                     LauncherAppState.getLauncherProvider().updateMaxItemId(maxItemId);
                 } else {
+                	//zy 
                     TreeMap<Integer, Long> orderedScreens = loadWorkspaceScreensDb(mContext);
                     for (Integer i : orderedScreens.keySet()) {
                         sBgWorkspaceScreens.add(orderedScreens.get(i));
@@ -2240,6 +2259,7 @@ public class LauncherModel extends BroadcastReceiver {
             HashMap<Long, FolderInfo> currentFolders = new HashMap<Long, FolderInfo>();
             HashMap<Long, FolderInfo> otherFolders = new HashMap<Long, FolderInfo>();
 
+            //zy 将current 和other 分开,
             // Separate the items that are on the current screen, and all the other remaining items
             filterCurrentWorkspaceItems(currentScreen, workspaceItems, currentWorkspaceItems,
                     otherWorkspaceItems);
@@ -2263,6 +2283,7 @@ public class LauncherModel extends BroadcastReceiver {
 
             bindWorkspaceScreens(oldCallbacks, orderedScreenIds);
 
+            //zy 
             // Load items on the current page
             bindWorkspaceItems(oldCallbacks, currentWorkspaceItems, currentAppWidgets,
                     currentFolders, null);
@@ -2313,6 +2334,7 @@ public class LauncherModel extends BroadcastReceiver {
                 Log.d(TAG, "loadAndBindAllApps mAllAppsLoaded=" + mAllAppsLoaded);
             }
             if (!mAllAppsLoaded) {
+            	//zy 同packageManager加载
                 loadAllApps();
                 synchronized (LoaderTask.this) {
                     if (mStopped) {
@@ -2325,6 +2347,7 @@ public class LauncherModel extends BroadcastReceiver {
             }
         }
 
+        //zy bind all apps
         private void onlyBindAllApps() {
             final Callbacks oldCallbacks = mCallbacks.get();
             if (oldCallbacks == null) {
@@ -2358,6 +2381,7 @@ public class LauncherModel extends BroadcastReceiver {
             }
         }
 
+        //zy 加载所有app
         private void loadAllApps() {
             final long loadTime = DEBUG_LOADERS ? SystemClock.uptimeMillis() : 0;
 
@@ -2369,6 +2393,7 @@ public class LauncherModel extends BroadcastReceiver {
             }
 
             final PackageManager packageManager = mContext.getPackageManager();
+            //zy 加载进all app的条件 Intent.ACTION_MAIN, Intent.CATEGORY_LAUNCHER
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
             mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -2377,6 +2402,7 @@ public class LauncherModel extends BroadcastReceiver {
 
             // Query for the set of apps
             final long qiaTime = DEBUG_LOADERS ? SystemClock.uptimeMillis() : 0;
+            //zy 1.获取所有app信息
             List<ResolveInfo> apps = packageManager.queryIntentActivities(mainIntent, 0);
             if (DEBUG_LOADERS) {
                 Log.d(TAG, "queryIntentActivities took "
@@ -2387,6 +2413,7 @@ public class LauncherModel extends BroadcastReceiver {
             if (apps == null || apps.isEmpty()) {
                 return;
             }
+            //zy 2.排序
             // Sort the applications by name
             final long sortTime = DEBUG_LOADERS ? SystemClock.uptimeMillis() : 0;
             Collections.sort(apps,
@@ -2396,6 +2423,7 @@ public class LauncherModel extends BroadcastReceiver {
                         + (SystemClock.uptimeMillis()-sortTime) + "ms");
             }
 
+            //zy 3.
             // Create the ApplicationInfos
             for (int i = 0; i < apps.size(); i++) {
                 ResolveInfo app = apps.get(i);
@@ -2408,6 +2436,7 @@ public class LauncherModel extends BroadcastReceiver {
             final ArrayList<AppInfo> added = mBgAllAppsList.added;
             mBgAllAppsList.added = new ArrayList<AppInfo>();
 
+            //zy 4.bind 创建runnable对象 运行callbacks.bindAllApplications; 发送到main thread
             // Post callback on main thread
             mHandler.post(new Runnable() {
                 public void run() {

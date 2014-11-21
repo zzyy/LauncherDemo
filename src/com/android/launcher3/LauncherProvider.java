@@ -1007,6 +1007,7 @@ public class LauncherProvider extends ContentProvider {
          * @param db The database to write the values into
          * @param filterContainerId The specific container id of items to load
          */
+        //zy 根据workspaceResourceId 加载xml 解析 并存入数据库
         private int loadFavorites(SQLiteDatabase db, int workspaceResourceId) {
             Intent intent = new Intent(Intent.ACTION_MAIN, null);
             intent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -1017,6 +1018,7 @@ public class LauncherProvider extends ContentProvider {
             PackageManager packageManager = mContext.getPackageManager();
             int i = 0;
             try {
+            	//zy 解析xml
                 XmlResourceParser parser = mContext.getResources().getXml(workspaceResourceId);
                 AttributeSet attrs = Xml.asAttributeSet(parser);
                 beginDocument(parser, TAG_FAVORITES);

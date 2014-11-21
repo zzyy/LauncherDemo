@@ -227,6 +227,7 @@ public class IconCache {
                 entry.title = info.activityInfo.name;
             }
 
+            //zy 使用Utilities.createIconBitmap创建bitmap
             entry.icon = Utilities.createIconBitmap(
                     getFullResIcon(info), mContext);
         }

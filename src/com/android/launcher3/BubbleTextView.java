@@ -105,7 +105,8 @@ public class BubbleTextView extends TextView {
     }
 
     public void applyFromShortcutInfo(ShortcutInfo info, IconCache iconCache) {
-        Bitmap b = info.getIcon(iconCache);
+        //zy ªÒ»°Õº±Íbitmap
+    	Bitmap b = info.getIcon(iconCache);
         LauncherAppState app = LauncherAppState.getInstance();
         DeviceProfile grid = app.getDynamicGrid().getDeviceProfile();
 

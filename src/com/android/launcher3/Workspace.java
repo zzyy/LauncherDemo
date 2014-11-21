@@ -774,6 +774,7 @@ public class Workspace extends SmoothPagedView
         addInScreen(child, container, screenId, x, y, spanX, spanY, false, false);
     }
 
+    //zy
     // At bind time, we use the rank (screenId) to compute x and y for hotseat items.
     // See implementation for parameter definition.
     void addInScreenFromBind(View child, long container, long screenId, int x, int y,
@@ -819,7 +820,8 @@ public class Workspace extends SmoothPagedView
 
         final CellLayout layout;
         if (container == LauncherSettings.Favorites.CONTAINER_HOTSEAT) {
-            layout = mLauncher.getHotseat().getLayout();
+            //zy º”»Îhotseat
+        	layout = mLauncher.getHotseat().getLayout();
             child.setOnKeyListener(null);
 
             // Hide folder title in the hotseat
