@@ -3737,6 +3737,7 @@ public class Launcher extends Activity
                     }
                     break;
                 case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
+                	//创建view 
                     FolderIcon newFolder = FolderIcon.fromXml(R.layout.folder_icon, this,
                             (ViewGroup) workspace.getChildAt(workspace.getCurrentPage()),
                             (FolderInfo) item, mIconCache);
@@ -3938,7 +3939,7 @@ public class Launcher extends Activity
                 mIntentsOnWorkspaceFromUpgradePath = null;
             }
         } else {
-        	//zy 加载all apps
+        	//zy 将数据放入mAppsCustomizeContent, 重绘界面
             if (mAppsCustomizeContent != null) {
                 mAppsCustomizeContent.setApps(apps);
             }
