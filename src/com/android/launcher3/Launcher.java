@@ -2166,6 +2166,8 @@ public class Launcher extends Activity
             }
         }
 
+        
+        //zy 由tag区分点击的图标
         Object tag = v.getTag();
         if (tag instanceof ShortcutInfo) {
             // Open shortcut
@@ -2403,6 +2405,7 @@ public class Launcher extends Activity
         if (!info.opened && !folderIcon.getFolder().isDestroyed()) {
             // Close any open folder
             closeFolder();
+            //zy 打开folder 在mDragLayer中加入folderIcon.mFolder
             // Open the requested folder
             openFolder(folderIcon);
         } else {
@@ -3737,6 +3740,7 @@ public class Launcher extends Activity
                     }
                     break;
                 case LauncherSettings.Favorites.ITEM_TYPE_FOLDER:
+
                 	//zy 获取folder的view
                     FolderIcon newFolder = FolderIcon.fromXml(R.layout.folder_icon, this,
                             (ViewGroup) workspace.getChildAt(workspace.getCurrentPage()),
@@ -3939,7 +3943,7 @@ public class Launcher extends Activity
                 mIntentsOnWorkspaceFromUpgradePath = null;
             }
         } else {
-        	//zy 加载all apps
+        	//zy 将数据放入mAppsCustomizeContent, 重绘界面
             if (mAppsCustomizeContent != null) {
                 mAppsCustomizeContent.setApps(apps);
             }
