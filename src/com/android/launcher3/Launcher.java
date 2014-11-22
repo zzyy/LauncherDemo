@@ -2166,6 +2166,8 @@ public class Launcher extends Activity
             }
         }
 
+        
+        //zy 由tag区分点击的图标
         Object tag = v.getTag();
         if (tag instanceof ShortcutInfo) {
             // Open shortcut
@@ -2403,6 +2405,7 @@ public class Launcher extends Activity
         if (!info.opened && !folderIcon.getFolder().isDestroyed()) {
             // Close any open folder
             closeFolder();
+            //zy 打开folder 在mDragLayer中加入folderIcon.mFolder
             // Open the requested folder
             openFolder(folderIcon);
         } else {
