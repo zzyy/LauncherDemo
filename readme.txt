@@ -8,3 +8,5 @@ HashMap<Long, ItemInfo> sBgItemsIdMap = id(_id)和itemInfo的键值对
 
 图标: BubbleTextView	layout/application	对应的style: WorkspaceIcon
 folder图标:	FolderIcon	layou/folder_icon	包含一个ImageView(背景图片) 和一个 BubbleTextView
+
+workspace cellLayout:	workspace_screen

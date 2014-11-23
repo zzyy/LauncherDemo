@@ -267,6 +267,7 @@ public class LauncherProvider extends ContentProvider {
 
             // Use default workspace resource if none provided
             if (workspaceResId == 0) {
+            	//zy 获取资源id
                 workspaceResId = sp.getInt(DEFAULT_WORKSPACE_RESOURCE_ID, R.xml.default_workspace);
             }
 

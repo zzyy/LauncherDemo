@@ -531,7 +531,8 @@ public class Workspace extends SmoothPagedView
     }
 
     public long insertNewWorkspaceScreen(long screenId, int insertIndex) {
-        if (mWorkspaceScreens.containsKey(screenId)) {
+        //zy 插入workspace的一页
+    	if (mWorkspaceScreens.containsKey(screenId)) {
             throw new RuntimeException("Screen id " + screenId + " already exists!");
         }
 
@@ -541,6 +542,7 @@ public class Workspace extends SmoothPagedView
         newScreen.setOnLongClickListener(mLongClickListener);
         newScreen.setOnClickListener(mLauncher);
         newScreen.setSoundEffectsEnabled(false);
+        //zy
         mWorkspaceScreens.put(screenId, newScreen);
         mScreenOrder.add(insertIndex, screenId);
         addView(newScreen, insertIndex);
@@ -863,6 +865,7 @@ public class Workspace extends SmoothPagedView
         // Get the canonical child id to uniquely represent this view in this screen
         int childId = LauncherModel.getCellLayoutChildId(container, screenId, x, y, spanX, spanY);
         boolean markCellsAsOccupied = !(child instanceof Folder);
+        //zy 将view加入cellLayout
         if (!layout.addViewToCellLayout(child, insert ? 0 : -1, childId, lp, markCellsAsOccupied)) {
             // TODO: This branch occurs when the workspace is adding views
             // outside of the defined grid
