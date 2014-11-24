@@ -216,6 +216,7 @@ class DeviceProfile {
         hotseatCellHeightPx = iconSizePx;
 
         // Folder
+        //zy folder 中app图标 的宽高
         folderCellWidthPx = cellWidthPx + 3 * edgeMarginPx;
         folderCellHeightPx = cellHeightPx + (int) ((3f/2f) * edgeMarginPx);
         folderBackgroundOffset = -edgeMarginPx;

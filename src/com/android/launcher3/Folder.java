@@ -978,9 +978,11 @@ public class Folder extends LinearLayout implements DragSource, View.OnClickList
         int contentAreaHeightSpec = MeasureSpec.makeMeasureSpec(getContentAreaHeight(),
                 MeasureSpec.EXACTLY);
         mContent.setFixedSize(mContent.getDesiredWidth(), mContent.getDesiredHeight());
+        //zy 
         mScrollView.measure(contentAreaWidthSpec, contentAreaHeightSpec);
         mFolderName.measure(contentAreaWidthSpec,
                 MeasureSpec.makeMeasureSpec(mFolderNameHeight, MeasureSpec.EXACTLY));
+        //zy 设置本身宽高
         setMeasuredDimension(width, height);
     }
 

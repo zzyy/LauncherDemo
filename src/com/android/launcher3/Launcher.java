@@ -391,6 +391,7 @@ public class Launcher extends Activity
         DisplayMetrics dm = new DisplayMetrics();
         display.getMetrics(dm);
         // Lazy-initialize the dynamic grid
+        //zy 初始化 设置icon的size
         DeviceProfile grid = app.initDynamicGrid(this,
                 Math.min(smallestSize.x, smallestSize.y),
                 Math.min(largestSize.x, largestSize.y),

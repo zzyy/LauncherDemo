@@ -196,6 +196,7 @@ public class AppsCustomizeTabHost extends TabHost implements LauncherTransitiona
         mAppsCustomizePane.requestFocus();
     }
 
+    //zy allApps界面透明度
     private void onTabChangedEnd(AppsCustomizePagedView.ContentType type) {
         int bgAlpha = (int) (255 * (getResources().getInteger(
             R.integer.config_appsCustomizeSpringLoadedBgAlpha) / 100f));

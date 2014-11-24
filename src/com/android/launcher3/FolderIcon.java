@@ -139,6 +139,7 @@ public class FolderIcon extends LinearLayout implements FolderListener {
         icon.setClipToPadding(false);
         icon.mFolderName = (BubbleTextView) icon.findViewById(R.id.folder_icon_name);
         icon.mFolderName.setText(folderInfo.title);
+        //zy 背景图片
         icon.mPreviewBackground = (ImageView) icon.findViewById(R.id.preview_background);
         LauncherAppState app = LauncherAppState.getInstance();
         DeviceProfile grid = app.getDynamicGrid().getDeviceProfile();
@@ -555,6 +556,7 @@ public class FolderIcon extends LinearLayout implements FolderListener {
     protected void dispatchDraw(Canvas canvas) {
         super.dispatchDraw(canvas);
 
+        //zy 制作folderIcon图标
         if (mFolder == null) return;
         if (mFolder.getItemCount() == 0 && !mAnimating) return;
 
@@ -579,6 +581,7 @@ public class FolderIcon extends LinearLayout implements FolderListener {
                     d = v.getCompoundDrawables()[1];
                     mParams = computePreviewItemDrawingParams(i, mParams);
                     mParams.drawable = d;
+                    //zy 绘制到Canvas上
                     drawPreviewItem(canvas, mParams);
                 }
             }
